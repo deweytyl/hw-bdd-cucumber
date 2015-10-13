@@ -12,7 +12,10 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
+  first_item_index = page.body =~ Regexp.new(e1)
+  second_item_index = page.body =~ Regexp.new(e2)
+  
+  first_item_index.should < second_item_index
 end
 
 # Make it easier to express checking or unchecking several boxes at once
