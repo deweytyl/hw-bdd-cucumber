@@ -19,14 +19,23 @@ end
 #  "When I uncheck the following ratings: PG, G, R"
 #  "When I check the following ratings: G"
 
-When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
-  # HINT: use String#split to split up the rating_list, then
-  #   iterate over the ratings and reuse the "When I check..." or
-  #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
-  fail "Unimplemented"
+When /I (un)?check the following ratings: (.*)/ do |should_uncheck, rating_list|
+  ratings = rating_list.split ", "
+  
+  ratings.each do |rating|
+    if should_uncheck
+      uncheck(rating)
+    else 
+      check(rating)
+    end
+  end
 end
 
+# Solution adapted from:
+# http://stackoverflow.com/questions/5490614/capybara-how-do-i-test-that-a-table-has-3-rows-using-capybara
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  expected_rows = Movie.all.count
+  
+  page.should have_css('table#movies tbody tr', :count => expected_rows)
 end
